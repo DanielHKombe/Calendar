@@ -117,21 +117,21 @@ int main()
             }
             case '<':
             {
-				day--;
-				if (day < 1)
-				{
-					mon--;
-                    nDay[1] = isLeap(yr) ? 29 : 28;
-					if (mon < 1)
-					{
-						yr--;
-						mon = 12;
-                        nDay[1] = isLeap(yr) ? 29 : 28;
-					}
-					day = nDay[mon - 1]; 
-				}
-				cal.printspecCal(mon, yr, day, id, created);
-				break;
+		day--;
+		if (day < 1)
+		{
+			mon--;
+			nDay[1] = isLeap(yr) ? 29 : 28;
+			if (mon < 1)
+			{
+				yr--;
+				mon = 12;
+				nDay[1] = isLeap(yr) ? 29 : 28;
+			}
+			day = nDay[mon - 1]; 
+		}
+		cal.printspecCal(mon, yr, day, id, created);
+		break;
             }
             case '>':
             {
