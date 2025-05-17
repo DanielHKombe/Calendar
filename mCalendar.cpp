@@ -42,8 +42,16 @@ int main()
     int id = 0;
     do 
     {
+        if (mon == 0 || day == 0 || yr == 0)
+        {
+			mon = currentMonth;
+			day = currentDay;
+			yr = currentYear;
+        }
+
         cout << "[ENTER] Program Command: ";
         cin >> choice;
+        cin.ignore();
         choice = toupper(choice);
 
         switch (choice) 
@@ -138,9 +146,9 @@ int main()
 		day++;
 		if (day > nDay[mon - 1])
 		{
-		    	day = 1;
+			day = 1;
 			mon++;
-		    	nDay[1] = isLeap(yr) ? 29 : 28;
+			nDay[1] = isLeap(yr) ? 29 : 28;
 			if (mon > 12)
 			{
 				yr++;
@@ -156,17 +164,49 @@ int main()
                 cout << "Enter Month (>=1) and (<=12): ";
                 //cin.ignore();
                 mon = typeValidation();
+                if (mon > 0)
+                {
+                    while (mon > 12)
+                    {
+                        cerr << "Invalid month. Please enter a month (<=12): ";
+                        mon = typeValidation();
+                        if (mon > 0)
+                        {
+                            if (mon <= 12)
+                                break;
+                            else
+                                continue;
+                        }
+                        else if (mon < 0)
+                        {
+                            cout << "Invalid input. Month is out of range!\n\n";
+                            mon = 0;
+                            break;
+                        }
+                        else
+                            break;
+                    }
+
+                }
+		else if (mon < 0)
+		{
+			cout << "Invalid input. Month is out of range!\n\n";
+			continue;
+		}
+                else
+                {
+                    cout << "Try again!\n\n";
+                    continue;
+                }
+				if (!mon)
+				{
+					cout << "Try again!\n\n";
+					continue;
+				}
                 cout << "Enter Year (>=1): ";
                 //cin.ignore();
                 yr = typeValidation();
-                if (mon && yr)
-                {
-                    while (mon > 12) {
-                        cerr << "Invalid month. Please enter a value (<=12): ";
-                        cin >> mon;
-                    }
-                }
-                else
+                if (!yr)
                 {
                     cout << "Try again!\n\n";
                     continue;
@@ -174,24 +214,53 @@ int main()
 
                 cout << "Do you want to [ENTER] a specific day? (Y/N): ";
                 cin >> choice;
+                cin.ignore();
                 choice = toupper(choice);
 
-                if (choice == 'Y') {
+                if (choice == 'Y') 
+                {
                     cout << "Enter Day: ";
                     //cin.ignore();
                     day = typeValidation();
-                    if (day)
+                    if (day > 0)
                     {
-                        while (day > nDay[mon - 1]) {
-                            cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): \n";
-                            cin >> day;
+						while (day > nDay[mon - 1])
+                        {
+                            cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): ";
+                            day = typeValidation();
+                            if (day > 0)
+                            {
+                                if (day <= nDay[mon - 1])
+                                    break;
+                                else
+                                    continue;
+                            }
+                            else if (day < 0)
+                            {
+                                cout << "Invalid input. Day is out of range!\n\n";
+                                day = 0;
+                                break;
+                            }
+                            else
+                                break;
                         }
                     }
+			else if (day < 0)
+			{
+				cout << "Invalid input. Day is out of range!\n\n";
+				day = currentDay;
+				continue;
+			}
                     else
                     {
                         cout << "Try again!\n";
                         continue;
                     }
+		if (!day)
+		{
+			cout << "Try again!\n\n";
+			continue;
+		}
                 }
                 else if (choice == 'N')
                 {
@@ -209,19 +278,43 @@ int main()
             case 'A': // Add event
             {
                 int tday = 0;
-                created = true;
                 cout << "Enter Month (>=1) and (<=12): ";
                 //cin.ignore();
                 mon = typeValidation();
-                if (mon)
+                if (mon > 0)
                 {
-                    while (mon > 12) {
+                    while (mon > 12)
+                    {
                         cerr << "Invalid month. Please enter a month (<=12): ";
-                        cin >> mon;
+                        mon = typeValidation();
+                        if (mon > 0)
+                        {
+                            if (mon <= 12)
+                                break;
+                            else
+                                continue;
+                        }
+                        else if (mon < 0)
+                        {
+                            cout << "Invalid input. Month is out of range!\n\n";
+                            mon = 0;
+                            break;
+                        }
+                        else
+                            break;
                     }
-
                 }
+		else if (mon < 0)
+		{
+			cout << "Invalid input. Month is out of range!\n\n";
+			continue;
+		}
                 else
+                {
+                    cout << "Try again!\n\n";
+                    continue;
+                }
+                if (!mon)
                 {
                     cout << "Try again!\n\n";
                     continue;
@@ -237,23 +330,50 @@ int main()
                 cout << "Enter Day: ";
                 //cin.ignore();
                 tday = typeValidation();
-                if (tday)
+                if (tday > 0)
                 {
-                    while (tday > nDay[mon - 1]) {
+                    while (tday > nDay[mon - 1])
+                    {
                         cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): ";
-                        cin >> tday;
+                        tday = typeValidation();
+                        if (tday > 0)
+                        {
+                            if (tday <= nDay[mon - 1])
+                                break;
+                            else
+                                continue;
+                        }
+                        else if (tday < 0)
+                        {
+                            cout << "Invalid input. Day is out of range!\n\n";
+                            tday = 0;
+                            break;
+                        }
+                        else
+                            break;
                     }
                 }
+		else if (tday < 0)
+		{
+			cout << "Invalid input. Day is out of range!\n\n";
+			tday = 0;
+			continue;
+		}
                 else
                 {
                     cout << "Try again!\n\n";
                     continue;
                 }
-
+		if (!tday)
+		{
+			cout << "Try again!\n\n";
+			continue;
+		}
                 cout << "[ENTER] Event: ";
                 cin.ignore();
                 getline(cin, event);
                 cal.enterEvent(tday, mon, yr, event);
+		created = true;
                 cal.printspecCal(mon, yr, day, id, created);
                 break;
             }
@@ -276,7 +396,7 @@ int main()
                         << "\n[ENTER] the id to delete: ";
                     //cin.ignore();
                     id = typeValidation();
-                    if (id)
+                    if (id > 0)
                     {
                         if (id > cal.printID())
                         {
@@ -292,9 +412,15 @@ int main()
                             cal.printspecCal(mon, yr, day, id, created);
                         }
                     }
-                    else
+                    else if( id < 0)
                     {
                         
+                        cout << "Invalid input. ID is out of range!\n\n";
+                        id = 0;
+                        continue;
+                    }
+                    else
+                    {
                         cout << "Try again!\n\n";
                         id = 0;
                         continue;
@@ -344,19 +470,19 @@ int main()
                         cin >> fName;
                     }
                 }
-				bool exists = fileExists(fName);
-				if (exists)
-				{
-                    cout << "Outputing events stored in " << fName << " file...\n\n";
-                    Sleep(cal.printID() * 500);
-					cal.fileReading(fName);
-				}
-				else
-				{
-                    fName = cal.getfName();
-					cout << "File not found.\n\n";
-					continue;
-				}
+		bool exists = fileExists(fName);
+		if (exists)
+		{
+		    cout << "Outputing events stored in " << fName << " file...\n\n";
+		    Sleep(cal.printID() * 500);
+			cal.fileReading(fName);
+		}
+		else
+		{
+			fName = cal.getfName();
+			cout << "File not found.\n\n";
+			continue;
+		}
                 break;
             }
 
@@ -433,7 +559,8 @@ int typeValidation()
     }
     catch (const out_of_range& e)
     {
-        cerr << e.what();
+        //cerr << e.what();
+        return id;
 	}
 	catch (...)
 	{
