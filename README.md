@@ -31,6 +31,69 @@
 g++ main.cpp -o calendar -std=c++11 && ./calendar
 ```
 
+## 🧭 Navigation Command Reference
+
+### **Month/Year Navigation**
+| Key | Action | Behavior | Visual Feedback |
+|-----|--------|----------|-----------------|
+| `p` | Previous Month | Decrements month (wraps to December if January) | Month header updates<br>Day positions shift left |
+| `n` | Next Month | Increments month (wraps to January if December) | Month header updates<br>Day positions shift right |
+| `s` | Specific Date | Prompts for:<br>▪ Month (1-12)<br>▪ Year (≥1)<br>▪ Optional day | Jumps to target date<br>Highlights `[DAY]` if provided |
+
+**Example Flow**:
+```plaintext
+> s
+Enter Month: 12
+Enter Year: 2024
+[Optional] Day: 25
+[Calendar now shows December 2024 with [25] highlighted]
+```
+
+### **Daily/Weekly Navigation**
+| Key | Action | Behavior | Boundary Handling |
+|-----|--------|----------|-------------------|
+| `<` | Previous Day | `day -= 1` | Rolls to prev month if day=1 |
+| `>` | Next Day | `day += 1` | Rolls to next month if day=31 |
+| `u` | Last Week | `day -= 7` | Adjusts month/year if crossing boundaries |
+| `b` | Next Week | `day += 7` | Adjusts month/year if crossing boundaries |
+
+**Visual Indicators**:
+- Current day always marked with `[ ]`
+- Week navigation preserves relative day position
+
+### **Special Cases**
+1. **Leap Years**:
+   ```plaintext
+   February 2024:
+   [28] → `>` → [29] (Leap day)
+   [29] → `>` → [1] (March)
+   ```
+2. **BCE Dates**:
+   ```plaintext
+   > s
+   Month: 1 Year: -44 (44 BCE)
+   Shows January 44 BCE with Julian calendar rules
+   ```
+
+### **Navigation Flowchart**
+```mermaid
+graph TD
+    A[Current View] --> B{Key Press}
+    B -->|p/n| C[Month Change]
+    B -->|s| D[Jump to Date]
+    B -->|< > u b| E[Day Adjustment]
+    C --> F[Recalculate Grid]
+    D --> F
+    E --> F
+    F --> G[Refresh Display]
+```
+
+**Tips**:
+1. Press `c` to quickly return to current date
+2. Combine `s` with no day input to view month overview
+3. Week navigation (`u`/`b`) maintains same month
+```
+
 ## ⌨️ Command Reference  
 | Key | Action                  | Example Usage          |  
 |-----|-------------------------|------------------------|  
