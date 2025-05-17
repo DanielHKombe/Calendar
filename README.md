@@ -1,5 +1,3 @@
-Here's the complete, integrated Markdown file with all components combined cohesively:
-
 ```markdown
 # 📅 C++ Calendar Application - Complete Documentation
 
@@ -109,8 +107,8 @@ bool Date::isLeap(int year) {
 ```
 Sun Mon Tue Wed Thu Fri Sat
           1   2   3   4   5
-  6   7   8   9  10 |11| 12
-[13] 14  15  16  17  18  19
+  6   7   8   9  10  11  12
+ 13 14  15  16  [17] 18 |19|
 ```
 
 ### **2.3 Event Persistence**  
@@ -139,8 +137,8 @@ while (day > nDay[month-1]) {
 
 ## **5. Visual Demonstration**  
 ![Calendar Screenshot](image.png)  
-- `|11|` = Event day  
-- `[13]` = Current day  
+- `|19|` = Event day  
+- `[17]` = Current day  
 
 ## **6. Conclusion**  
 This application demonstrates:  
