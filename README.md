@@ -136,7 +136,9 @@ while (day > nDay[month-1]) {
 ```
 
 ## **5. Visual Demonstration**  
-![Calendar Screenshot](image.png)  
+![Calendar Screenshot]
+![image](https://github.com/user-attachments/assets/cc2ad15a-7bf3-4ba9-a6d7-295cdb0452ce)
+
 - `|19|` = Event day  
 - `[17]` = Current day  
 
