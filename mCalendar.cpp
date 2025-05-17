@@ -135,21 +135,21 @@ int main()
             }
             case '>':
             {
-				day++;
-				if (day > nDay[mon - 1])
-				{
-                    day = 1;
-					mon++;
-                    nDay[1] = isLeap(yr) ? 29 : 28;
-					if (mon < 1)
-					{
-						yr--;
-						mon = 12;
-                        nDay[1] = isLeap(yr) ? 29 : 28;
-					}
-				}
-				cal.printspecCal(mon, yr, day, id, created);
-				break;
+		day++;
+		if (day > nDay[mon - 1])
+		{
+		    	day = 1;
+			mon++;
+		    	nDay[1] = isLeap(yr) ? 29 : 28;
+			if (mon > 12)
+			{
+				yr++;
+				mon = 1;
+				nDay[1] = isLeap(yr) ? 29 : 28;
+			}
+		}
+		cal.printspecCal(mon, yr, day, id, created);
+		break;
             }
             case 'S': // Select specific date
             {
