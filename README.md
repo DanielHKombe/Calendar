@@ -40,14 +40,44 @@ g++ main.cpp -o calendar -std=c++11 && ./calendar
 | `g` | Go to event             | `g → [ID]`             |  
 | `q` | Quit                    | `q` (Exits program)    |  
 
-## 📂 File Format  
-Saved events use this structure:  
+## 📂 File Formats
+### System Auto-Save File (`2.718281828459045235.txt`)
+Stores events in a compact format for program reloading:
 ```plaintext
-[YEAR] [MONTH] [DAY]  
-[Event Description]  
+[YEAR] [MONTH] [DAY]
+[Event Description]
+```
+Example:
+```plaintext
+2025 5 16
+Team Meeting
+2025 6 19
+Doctor's Appointment
 ```
 
----
+### Custom Export Files (User-Specified)
+Saved in human-readable format when using `f` command:
+```plaintext
+Date: [DAY]/[MONTH]/[YEAR]
+Description: [Event Description]
+
+```
+Example:
+```plaintext
+Date: 16/5/2025
+Description: Team Meeting
+
+Date: 19/6/2025
+Description: Doctor's Appointment
+```
+
+Key Differences:
+| Feature          | Auto-Save Format | Custom Export Format |
+|------------------|------------------|----------------------|
+| **Structure**    | Raw data         | Labeled fields       |
+| **Delimiters**   | Spaces           | Slashes (dates)      |
+| **Readability**  | Machine-optimal  | Human-friendly       |
+| **Extension**    | .txt             | User-defined         |
 
 # **Technical Report: Advanced Calendar Application in C++**  
 
