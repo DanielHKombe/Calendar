@@ -63,7 +63,7 @@ class Calendar : public Date
     int firstDay;
     int id;
     fstream cFile;
-    bool exist;
+    //bool exist;
     string fileName;
    
 public:
@@ -71,9 +71,9 @@ public:
     Calendar(int yr, int mon, int d);
     ~Calendar();
     int getFirstDay(int year, int month);
-	void printcuCal(bool);
-    void printspecCal(int mon, int yr, int d, int , bool);
-    void printCal(int mon, int yr, int d, bool created);
+	void printcuCal();
+    void printspecCal(int mon, int yr, int d, int);
+    void printCal(int mon, int yr, int d, int ID = 0);
     void printMenu();
     void enterEvent(int day, int mon, int yr, string ev);
     void deleteEvent(int index);
@@ -86,8 +86,8 @@ public:
     {
         return fileName;
     }
-    void eReminder(bool created);
-    void especReminder(int mon, int yr, int d, bool created);
+    void eReminder();
+    void especReminder(int mon, int yr, int d);
     void fileOperation(string file);
     void fileReading(string file);
 };
