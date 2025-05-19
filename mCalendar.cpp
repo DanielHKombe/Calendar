@@ -16,11 +16,226 @@ bool isLeap(int year)
     return false;
 }
 
+int nDay[] = { 31, 28, 31, 30, 31,
+                30, 31, 31, 30,
+                31, 30, 31 };
+
+bool choiceA(int &yr, int &mon, int &d)
+{
+    cout << "Enter Month (>=1) and (<=12): ";
+    //cin.ignore();
+    mon = typeValidation();
+    if (mon > 0)
+    {
+        while (mon > 12)
+        {
+            cerr << "Invalid month. Please enter a month (<=12): ";
+            mon = typeValidation();
+            if (mon > 0)
+            {
+                if (mon <= 12)
+                    break;
+                else
+                    continue;
+            }
+            else if (mon < 0)
+            {
+                cout << "Invalid input. Month is out of range!\n\n";
+                mon = 0;
+                break;
+            }
+            else
+                break;
+        }
+    }
+    else if (mon < 0)
+    {
+        cout << "Invalid input. Month is out of range!\n\n";
+        return false;
+    }
+    else
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    if (!mon)
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    cout << "Enter Year (>=1): ";
+    //cin.ignore();
+    yr = typeValidation();
+    if (!yr)
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    cout << "Enter Day: ";
+    //cin.ignore();
+    d = typeValidation();
+    if (d > 0)
+    {
+        while (d > nDay[mon - 1])
+        {
+            cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): ";
+            d = typeValidation();
+            if (d > 0)
+            {
+                if (d <= nDay[mon - 1])
+                    break;
+                else
+                    continue;
+            }
+            else if (d < 0)
+            {
+                cout << "Invalid input. Day is out of range!\n\n";
+                d = 0;
+                break;
+            }
+            else
+                break;
+        }
+    }
+    else if (d < 0)
+    {
+        cout << "Invalid input. Day is out of range!\n\n";
+        d = 0;
+        return false;
+    }
+    else
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    if (!d)
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    return true;
+}
+
+bool choiceS(int& yr, int& mon, int& day, int currentDay)
+{
+    char choice;
+    cout << "Enter Month (>=1) and (<=12): ";
+    //cin.ignore();
+    mon = typeValidation();
+    if (mon > 0)
+    {
+        while (mon > 12)
+        {
+            cerr << "Invalid month. Please enter a month (<=12): ";
+            mon = typeValidation();
+            if (mon > 0)
+            {
+                if (mon <= 12)
+                    break;
+                else
+                    continue;
+            }
+            else if (mon < 0)
+            {
+                cout << "Invalid input. Month is out of range!\n\n";
+                mon = 0;
+                break;
+            }
+            else
+                break;
+        }
+
+    }
+    else if (mon < 0)
+    {
+        cout << "Invalid input. Month is out of range!\n\n";
+        return false;
+    }
+    else
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    if (!mon)
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+    cout << "Enter Year (>=1): ";
+    //cin.ignore();
+    yr = typeValidation();
+    if (!yr)
+    {
+        cout << "Try again!\n\n";
+        return false;
+    }
+
+    cout << "Do you want to [ENTER] a specific day? (Y/N): ";
+    cin >> choice;
+    cin.ignore();
+    choice = toupper(choice);
+
+    if (choice == 'Y')
+    {
+        cout << "Enter Day: ";
+        //cin.ignore();
+        day = typeValidation();
+        if (day > 0)
+        {
+            while (day > nDay[mon - 1])
+            {
+                cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): ";
+                day = typeValidation();
+                if (day > 0)
+                {
+                    if (day <= nDay[mon - 1])
+                        break;
+                    else
+                        continue;
+                }
+                else if (day < 0)
+                {
+                    cout << "Invalid input. Day is out of range!\n\n";
+                    day = 0;
+                    break;
+                }
+                else
+                    break;
+            }
+        }
+        else if (day < 0)
+        {
+            cout << "Invalid input. Day is out of range!\n\n";
+            day = currentDay;
+            return false;
+        }
+        else
+        {
+            cout << "Try again!\n";
+            return false;
+        }
+        if (!day)
+        {
+            cout << "Try again!\n\n";
+            return false;
+        }
+    }
+    else if (choice == 'N')
+    {
+        day = 1;
+    }
+    else
+    {
+        cerr << "Invalid input. Enter Y/N next time!\n";
+        return false;
+    }
+    return true;
+}
+
+
+
 int main()
 {
-    int nDay[] = { 31, 28, 31, 30, 31,
-                    30, 31, 31, 30,
-                    31, 30, 31 };
 
     time_t now = time(NULL);
     tm cTime;
@@ -32,8 +247,7 @@ int main()
     int currentDay = pTime->tm_mday;
     bool created = false;
     Calendar cal(currentYear, currentMonth, currentDay);
-    cal.printcuCal(created);
-
+    cal.printcuCal();
     
 	char choice;
     string event, fName;
@@ -63,8 +277,7 @@ int main()
                     yr++;
                     mon = 1;
                 }
-                //day = 1;
-                cal.printspecCal(mon, yr, day, id, created);
+                cal.printspecCal(mon, yr, day, id);
                 break;
 
             case 'P': // Previous month
@@ -74,8 +287,7 @@ int main()
                     yr--;
                     mon = 12;
                 }
-                //day = 1;
-                cal.printspecCal(mon, yr, day, id, created);
+                cal.printspecCal(mon, yr, day, id);
                 break;
             case 'C': // Current month
             {
@@ -83,7 +295,7 @@ int main()
                 yr = currentYear;
                 day = currentDay;
                 system("CLS");
-                cal.printcuCal(created);
+                cal.printcuCal();
                 break;
             }
 
@@ -100,9 +312,9 @@ int main()
                         mon = 12;
                         nDay[1] = isLeap(yr) ? 29 : 28;
                     }
-                    day += nDay[mon - 1]; // Add days from previous month
+                    day += nDay[mon - 1]; 
                 }
-                cal.printspecCal(mon, yr, day, id, created);
+                cal.printspecCal(mon, yr, day, id);
                 break;
             }
             case 'B':
@@ -120,261 +332,65 @@ int main()
                         nDay[1] = isLeap(yr) ? 29 : 28;
                     }
                 }
-                cal.printspecCal(mon, yr, day, id, created);
+                cal.printspecCal(mon, yr, day, id);
                 break;
             }
             case '<':
             {
-		day--;
-		if (day < 1)
-		{
-			mon--;
-			nDay[1] = isLeap(yr) ? 29 : 28;
-			if (mon < 1)
-			{
-				yr--;
-				mon = 12;
-				nDay[1] = isLeap(yr) ? 29 : 28;
-			}
-			day = nDay[mon - 1]; 
-		}
-		cal.printspecCal(mon, yr, day, id, created);
-		break;
+				day--;
+				if (day < 1)
+				{
+					mon--;
+                    nDay[1] = isLeap(yr) ? 29 : 28;
+					if (mon < 1)
+					{
+						yr--;
+						mon = 12;
+                        nDay[1] = isLeap(yr) ? 29 : 28;
+					}
+					day = nDay[mon - 1]; 
+				}
+				cal.printspecCal(mon, yr, day, id);
+				break;
             }
             case '>':
             {
-		day++;
-		if (day > nDay[mon - 1])
-		{
-			day = 1;
-			mon++;
-			nDay[1] = isLeap(yr) ? 29 : 28;
-			if (mon > 12)
-			{
-				yr++;
-				mon = 1;
-				nDay[1] = isLeap(yr) ? 29 : 28;
-			}
-		}
-		cal.printspecCal(mon, yr, day, id, created);
-		break;
+				day++;
+				if (day > nDay[mon - 1])
+				{
+                    day = 1;
+					mon++;
+                    nDay[1] = isLeap(yr) ? 29 : 28;
+					if (mon > 12)
+					{
+						yr++;
+						mon = 1;
+                        nDay[1] = isLeap(yr) ? 29 : 28;
+					}
+				}
+				cal.printspecCal(mon, yr, day, id);
+				break;
             }
             case 'S': // Select specific date
             {
-                cout << "Enter Month (>=1) and (<=12): ";
-                //cin.ignore();
-                mon = typeValidation();
-                if (mon > 0)
-                {
-                    while (mon > 12)
-                    {
-                        cerr << "Invalid month. Please enter a month (<=12): ";
-                        mon = typeValidation();
-                        if (mon > 0)
-                        {
-                            if (mon <= 12)
-                                break;
-                            else
-                                continue;
-                        }
-                        else if (mon < 0)
-                        {
-                            cout << "Invalid input. Month is out of range!\n\n";
-                            mon = 0;
-                            break;
-                        }
-                        else
-                            break;
-                    }
+                if (choiceS(yr, mon, day, currentDay))
+                    cal.printspecCal(mon, yr, day, id);
 
-                }
-		else if (mon < 0)
-		{
-			cout << "Invalid input. Month is out of range!\n\n";
-			continue;
-		}
-                else
-                {
-                    cout << "Try again!\n\n";
-                    continue;
-                }
-				if (!mon)
-				{
-					cout << "Try again!\n\n";
-					continue;
-				}
-                cout << "Enter Year (>=1): ";
-                //cin.ignore();
-                yr = typeValidation();
-                if (!yr)
-                {
-                    cout << "Try again!\n\n";
-                    continue;
-                }
-
-                cout << "Do you want to [ENTER] a specific day? (Y/N): ";
-                cin >> choice;
-                cin.ignore();
-                choice = toupper(choice);
-
-                if (choice == 'Y') 
-                {
-                    cout << "Enter Day: ";
-                    //cin.ignore();
-                    day = typeValidation();
-                    if (day > 0)
-                    {
-						while (day > nDay[mon - 1])
-                        {
-                            cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): ";
-                            day = typeValidation();
-                            if (day > 0)
-                            {
-                                if (day <= nDay[mon - 1])
-                                    break;
-                                else
-                                    continue;
-                            }
-                            else if (day < 0)
-                            {
-                                cout << "Invalid input. Day is out of range!\n\n";
-                                day = 0;
-                                break;
-                            }
-                            else
-                                break;
-                        }
-                    }
-			else if (day < 0)
-			{
-				cout << "Invalid input. Day is out of range!\n\n";
-				day = currentDay;
-				continue;
-			}
-                    else
-                    {
-                        cout << "Try again!\n";
-                        continue;
-                    }
-		if (!day)
-		{
-			cout << "Try again!\n\n";
-			continue;
-		}
-                }
-                else if (choice == 'N')
-                {
-                    day = 1;
-                }
-                else
-                {
-                    cerr << "Invalid input. Enter Y/N next time!\n";
-                    continue;
-                }
-                cal.printspecCal(mon, yr, day, id, created);
                 break;
             }
 
             case 'A': // Add event
             {
                 int tday = 0;
-                cout << "Enter Month (>=1) and (<=12): ";
-                //cin.ignore();
-                mon = typeValidation();
-                if (mon > 0)
+                if (choiceA(yr, mon, tday))
                 {
-                    while (mon > 12)
-                    {
-                        cerr << "Invalid month. Please enter a month (<=12): ";
-                        mon = typeValidation();
-                        if (mon > 0)
-                        {
-                            if (mon <= 12)
-                                break;
-                            else
-                                continue;
-                        }
-                        else if (mon < 0)
-                        {
-                            cout << "Invalid input. Month is out of range!\n\n";
-                            mon = 0;
-                            break;
-                        }
-                        else
-                            break;
-                    }
+                    cout << "[ENTER] Event: ";
+                    cin.ignore();
+                    getline(cin, event);
+                    cal.enterEvent(tday, mon, yr, event);
+                    cal.printspecCal(mon, yr, tday, id);
+                    day = tday;
                 }
-		else if (mon < 0)
-		{
-			cout << "Invalid input. Month is out of range!\n\n";
-			continue;
-		}
-                else
-                {
-                    cout << "Try again!\n\n";
-                    continue;
-                }
-                if (!mon)
-                {
-                    cout << "Try again!\n\n";
-                    continue;
-                }
-                cout << "Enter Year (>=1): ";
-				//cin.ignore();
-                yr = typeValidation();
-                if (!yr)
-                {
-                    cout << "Try again!\n\n";
-                    continue;
-			    }
-                cout << "Enter Day: ";
-                //cin.ignore();
-                tday = typeValidation();
-                if (tday > 0)
-                {
-                    while (tday > nDay[mon - 1])
-                    {
-                        cerr << "Invalid day. Please enter a day (<" << nDay[mon - 1] << "): ";
-                        tday = typeValidation();
-                        if (tday > 0)
-                        {
-                            if (tday <= nDay[mon - 1])
-                                break;
-                            else
-                                continue;
-                        }
-                        else if (tday < 0)
-                        {
-                            cout << "Invalid input. Day is out of range!\n\n";
-                            tday = 0;
-                            break;
-                        }
-                        else
-                            break;
-                    }
-                }
-		else if (tday < 0)
-		{
-			cout << "Invalid input. Day is out of range!\n\n";
-			tday = 0;
-			continue;
-		}
-                else
-                {
-                    cout << "Try again!\n\n";
-                    continue;
-                }
-		if (!tday)
-		{
-			cout << "Try again!\n\n";
-			continue;
-		}
-                cout << "[ENTER] Event: ";
-                cin.ignore();
-                getline(cin, event);
-                cal.enterEvent(tday, mon, yr, event);
-		created = true;
-                cal.printspecCal(mon, yr, day, id, created);
                 break;
             }
 
@@ -394,7 +410,6 @@ int main()
                     cal.printEvents();
                     cout << "Total number of ids is: " << cal.printID()
                         << "\n[ENTER] the id to delete: ";
-                    //cin.ignore();
                     id = typeValidation();
                     if (id > 0)
                     {
@@ -409,7 +424,7 @@ int main()
                             if (cal.printID() == 0)
                                 created = false;
                             id = 0;
-                            cal.printspecCal(mon, yr, day, id, created);
+                            cal.printspecCal(mon, yr, day, id);
                         }
                     }
                     else if( id < 0)
@@ -435,6 +450,12 @@ int main()
 
             case 'F':
             {
+				if (cal.printID() == 0)
+				{
+					cout << "\nNo events to write to a file.\n"
+						<< "Press [a] - to add an event\n\n";
+					continue;
+				}
                 cout << "[ENTER] a filename to now copy all the current events to it: ";
                 cin >> fName;
                 cal.fileOperation(fName);
@@ -470,19 +491,19 @@ int main()
                         cin >> fName;
                     }
                 }
-		bool exists = fileExists(fName);
-		if (exists)
-		{
-		    cout << "Outputing events stored in " << fName << " file...\n\n";
-		    Sleep(cal.printID() * 500);
-			cal.fileReading(fName);
-		}
-		else
-		{
-			fName = cal.getfName();
-			cout << "File not found.\n\n";
-			continue;
-		}
+				bool exists = fileExists(fName);
+				if (exists)
+				{
+                    cout << "Outputing events stored in " << fName << " file...\n\n";
+                    Sleep(cal.printID() * 500);
+					cal.fileReading(fName);
+				}
+				else
+				{
+                    fName = cal.getfName();
+					cout << "File not found.\n\n";
+					continue;
+				}
                 break;
             }
 
@@ -493,7 +514,6 @@ int main()
                     system("CLS");
                     cal.printEvents();
                     cout << "Pick an event, by it's id, and it's Calendar will be displayed: ";
-                    //cin.ignore();
 
                     id = typeValidation();
                     if (id)
@@ -508,7 +528,7 @@ int main()
                             mon = cal.events[id - 1].getmonth();
                             yr = cal.events[id - 1].getyear();
                             day = cal.events[id - 1].getday();
-                            cal.printspecCal(mon, yr, day, id, created);
+                            cal.printspecCal(mon, yr, day, id);
                             id = 0;
                         }
                     }
