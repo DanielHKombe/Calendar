@@ -37,7 +37,7 @@ bool Date::isLeap(int year)
     return false;
 }
 
-Calendar::Calendar(int yr, int mon, int d) : Date(yr, mon, d), firstDay(0), id(0), exist(false), fileName("")
+Calendar::Calendar(int yr, int mon, int d) : Date(yr, mon, d), firstDay(0), id(0), /*exist(false),*/ fileName("")
 { 
     cFile.open("2.718281828459045235.txt", ios::in);
     if (!cFile.is_open())
@@ -49,7 +49,7 @@ Calendar::Calendar(int yr, int mon, int d) : Date(yr, mon, d), firstDay(0), id(0
 	string event;
     if (cFile >> size)
     {
-        exist = true;
+        //exist = true;
         id = size;
 		for (int i = 0; i < size; i++)
 		{
@@ -130,11 +130,11 @@ void Calendar::deleteEvent(int index)
     }
 }
 
-void Calendar::eReminder(bool created)
+void Calendar::eReminder()
 {
     int leastDays = 30000;
     bool found = false;
-    if (created)
+    if (id > 0)
     {
         for (int i = 0; i < events.size(); i++)
         {
@@ -165,11 +165,11 @@ void Calendar::eReminder(bool created)
     else { cout << endl; }
 }
 
-void Calendar::especReminder(int mon, int yr, int d, bool created)
+void Calendar::especReminder(int mon, int yr, int d)
 {
     int leastDays = 30000;
     bool found = false;
-    if (created)
+    if (id > 0)
     {
         for (int i = 0; i < events.size(); i++)
         {
@@ -243,19 +243,19 @@ void Calendar::fileReading(string file)
     ioFile.close();
 }
 
-void Calendar::printcuCal(bool created)
-{
-    if (exist)
-        created = true;
+void Calendar::printcuCal()
+{/*
+    if (exist && id > 0)
+        created = true;*/
     firstDay = getFirstDay(year, month);
-    cout << setw(13) << getMonthName() << setw(13) << year << " "; eReminder(created);
+    cout << setw(13) << getMonthName() << setw(13) << year << " "; eReminder();
     cout << "***************************" << endl
         << "Sun Mon Tue Wed Thu Fri Sat" << endl;
-	printCal(month, year, day, created);
+	printCal(month, year, day);
     printMenu();
 }
 
-void Calendar::printspecCal(int mon, int year, int d, int ID,  bool created)
+void Calendar::printspecCal(int mon, int year, int d, int ID)
 {
     if (mon == 2)
         nDay[mon-1] = (isLeap(year)) ? 29 : 28;
@@ -264,18 +264,18 @@ void Calendar::printspecCal(int mon, int year, int d, int ID,  bool created)
         d = nDay[mon - 1];
 
     system("CLS");
-    if (exist)
-        created = true;
+    /*if (exist && ID > 0)
+        created = true;*/
     if (year < 1)
     {
         year = (-year) + 1;
-        cout << setw(13) << months[mon - 1] << setw(13) << year << " BCE "; especReminder(mon, year, d, created);
+        cout << setw(13) << months[mon - 1] << setw(13) << year << " BCE "; especReminder(mon, year, d);
         cout << "***************************" << endl
             << "Sun Mon Tue Wed Thu Fri Sat" << endl;
     }
     else
     {
-        cout << setw(13) << months[mon - 1] << setw(13) << year << " "; especReminder(mon, year, d, created);
+        cout << setw(13) << months[mon - 1] << setw(13) << year << " "; especReminder(mon, year, d);
         cout << "***************************" << endl
             << "Sun Mon Tue Wed Thu Fri Sat" << endl;
     }
@@ -283,11 +283,11 @@ void Calendar::printspecCal(int mon, int year, int d, int ID,  bool created)
     /*if (mon == month && year == this->year && !ID)
         d = day;*/
 
-	printCal(mon, year, d, created);
+	printCal(mon, year, d, ID);
     printMenu();
 }
 
-void Calendar::printCal(int mon, int yr, int d, bool created)
+void Calendar::printCal(int mon, int yr, int d, int ID)
 {
     int fDay = getFirstDay(yr, mon);
 
@@ -303,16 +303,21 @@ void Calendar::printCal(int mon, int yr, int d, bool created)
     int dCount = fDay + 1;
     int tday = nDay[mon - 1];
     vector<int>eday;
-    if (created)
+    if (id > 0)
     {
-        for (int i = 0; i < events.size(); i++)
+        if (ID)
+            eday.push_back(events[ID - 1].getday());
+        else
         {
-            if (events[i].getyear() == year && events[i].getmonth() == mon)
+            for (int i = 0; i < events.size(); i++)
             {
-                eday.push_back(events[i].getday());
+                if (events[i].getyear() == yr && events[i].getmonth() == mon)
+                {
+                    eday.push_back(events[i].getday());
+                }
             }
+            sort(eday.begin(), eday.end());
         }
-        sort(eday.begin(), eday.end());
         int size = eday.size(), j = 0;
         for (int i = 1; i <= tday; i++)
         {
@@ -486,7 +491,7 @@ void Calendar::printCal(int mon, int yr, int d, bool created)
         }
     }
     bool found = false;
-    if (created)
+    if (id > 0)
     {
         cout << "\n\nEvents for " << months[mon - 1] << " " << yr << ":" << endl;
         for (int i = 0; i < events.size(); i++)
