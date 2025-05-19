@@ -14,48 +14,60 @@
 
 ---
 
-## 📌 Features  
-- **Calendar Display**: View monthly layouts with current day highlighted  
-- **Event Management**: Add, delete, and list events with reminders  
-- **Navigation**:  
-  - Switch months/years (`p`/`n` keys)  
-  - Jump to specific dates (`s` key)  
-  - Daily/weekly navigation (`<`/`>`, `u`/`b` keys)  
-- **Data Persistence**:  
-  - Auto-save events to `2.718281828459045235.txt`  
-  - Export/import to custom files  
-- **Input Validation**: Robust handling for dates/commands  
+## 🌟 Features
+- **Interactive Calendar Display**
+  - Highlight current day `[17]` and events `|19|`
+  - Support for both AD and BCE dates
+- **Comprehensive Event Management**
+  - Add/delete events with reminders
+  - View all events chronologically
+- **Intuitive Navigation**
+  - Month/year, daily/weekly movement
+  - Quick jump to specific dates
+- **Data Persistence**
+  - Automatic saving/loading
+  - Custom export/import functionality
+- **Robust Validation**
+  - Date validation
+  - Error-resistant command handling
 
-## 🛠️ Installation  
+---
+
+## 🛠️ Installation
 ```bash
+# Compile and run
 g++ main.cpp -o calendar -std=c++11 && ./calendar
 ```
 
-## 🧭 Navigation Command Reference
+---
 
-### **Month/Year Navigation**
-| Key | Action | Behavior | Visual Feedback |
-|-----|--------|----------|-----------------|
-| `p` | Previous Month | Decrements month (wraps to December if January) | Month header updates<br>Day positions shift left |
-| `n` | Next Month | Increments month (wraps to January if December) | Month header updates<br>Day positions shift right |
-| `s` | Specific Date | Prompts for:<br>▪ Month (1-12)<br>▪ Year (≥1)<br>▪ Optional day | Jumps to target date<br>Highlights `[DAY]` if provided |
+## 🖥️ Usage
 
-**Example Flow**:
-```plaintext
-> s
-Enter Month: 12
-Enter Year: 2024
-[Optional] Day: 25
-[Calendar now shows December 2024 with [25] highlighted]
-```
+### Navigation Commands
+| Key | Action | Example | Behavior |
+|-----|--------|---------|----------|
+| `p` | Previous month | `p` | Wraps to December at January |
+| `n` | Next month | `n` | Wraps to January at December |
+| `s` | Specific date | `s 12 2024 25` | Jumps to Dec 25, 2024 |
+| `u` | Previous week | `u` | Moves back 7 days |
+| `b` | Next week | `b` | Moves forward 7 days |
+| `c` | Current date | `c` | Returns to today |
 
-### **Daily/Weekly Navigation**
-| Key | Action | Behavior | Boundary Handling |
-|-----|--------|----------|-------------------|
-| `<` | Previous Day | `day -= 1` | Rolls to prev month if day=1 |
-| `>` | Next Day | `day += 1` | Rolls to next month if day=31 |
-| `u` | Last Week | `day -= 7` | Adjusts month/year if crossing boundaries |
-| `b` | Next Week | `day += 7` | Adjusts month/year if crossing boundaries |
+### Event Commands
+| Key | Action | Example |
+|-----|--------|---------|
+| `a` | Add event | `a 15 5 2024 "Meeting"` |
+| `d` | Delete event | `d 2` (deletes event ID 2) |
+| `l` | List events | Shows all events |
+
+### System Commands
+| Key | Action | Example |
+|-----|--------|---------|
+| `f` | Export events | `f events.txt` |
+| `i` | Import events | `i backup.txt` |
+| `q` | Quit program | Saves before exiting |
+
+---
 
 **Visual Indicators**:
 - Current day always marked with `[ ]`
@@ -235,6 +247,11 @@ while (day > nDay[month-1]) {
 - `|19|` = Event day  
 - `[17]` = Current day  
 
+### Key Algorithms
+- **Zeller's Congruence** for weekday calculation
+- **Leap year detection** (including BCE dates)
+- **Smart date wrapping** for month/year transitions
+
 ## **6. Conclusion**  
 This application demonstrates:  
 ✔ Modular OOP design  
@@ -247,4 +264,4 @@ This application demonstrates:
 - Cloud synchronization  
 
 [📜 MIT License](LICENSE.txt)
-```
+
