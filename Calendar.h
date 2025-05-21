@@ -3,8 +3,6 @@
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
-#include <chrono>
-#include <thread>
 #include <string>
 #include <cctype>
 #include <vector>
