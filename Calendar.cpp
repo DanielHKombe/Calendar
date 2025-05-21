@@ -5,18 +5,9 @@ Date::Date(int yr , int mon, int d ) :
     month(mon),
     day(d)
 {
-    nDay[0] = 31;
     nDay[1] = (isLeap(year)) ? 29 : 28;
-    nDay[2] = 31;
-    nDay[3] = 30;
-    nDay[4] = 31;
-    nDay[5] = 30;
-    nDay[6] = 31;
-    nDay[7] = 31;
-    nDay[8] = 30;
-    nDay[9] = 31;
-    nDay[10] = 30;
-    nDay[11] = 31;
+	nDay[0] = nDay[2] = nDay[4] = nDay[6] = nDay[7] = nDay[9] = nDay[11] = 31;
+	nDay[3] = nDay[5] = nDay[8] = nDay[10] = 30;
     months[0] = "January";
     months[1] = "February";
     months[2] = "March";
@@ -321,6 +312,12 @@ void Calendar::printCal(int mon, int yr, int d, int ID)
         int size = eday.size(), j = 0;
         for (int i = 1; i <= tday; i++)
         {
+            if (j < size && i - 1 == eday[j])
+            {
+                j++;
+                i--;
+                continue;
+            }
             if (j < size && i == eday[j])
             {
                 if (i < 10)
