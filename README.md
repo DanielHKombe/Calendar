@@ -216,12 +216,62 @@ Sun Mon Tue Wed Thu Fri Sat
  13 14  15  16  [17] 18 |19|
 ```
 
+## 📅 Event Handling System (Enhanced)
+
 ### **2.3 Event Persistence**  
 **File Format**:  
 ```plaintext
 2025 5 16
 Team Meeting
 ```
+The calendar now supports **multiple events per day** with optimized display logic and robust input handling. Key changes include:
+
+### 2.4. Multi-Event Day Support
+- **Old Behavior**: Only displayed one marker (`|day|`) per day regardless of event count  
+- **New Behavior**:  
+  ```cpp
+  // Collects ALL events for the month
+  for (Event e : events) {
+      if (e.matchesMonth(mon, yr)) {
+          eday.push_back(e.getDay()); // Stores all event days
+      }
+  }
+  sort(eday.begin(), eday.end()); // Ensures chronological display
+  ```
+  - Days with events show `|day|` marker whether they have 1 or 100 events  
+  - Event list at month bottom shows **all** events for highlighted days
+
+
+### 2.5 Event Navigation
+| Command | Old Behavior | New Behavior |
+|---------|-------------|-------------|
+| `g`     | Broke with multi-event days | Shows target day with all events preserved |
+| `u/b` (week nav) | Could skip events | Maintains correct event markers during week jumps |
+
+### 2.6 Edge Case Handling
+Tested scenarios:
+- ✅ 5+ events on a single day  
+- ✅ Events on month boundaries (e.g., Jan 31 + Feb 1)  
+- ✅ Leap day events (Feb 29)  
+- ✅ Empty event lists  
+
+### How to Add Events:
+```bash
+1. Press 'a'  
+2. Enter date (Day Month Year)  
+3. Type event description  
+4. See all events for that day marked with |day|  
+```
+
+### Example Output:
+```
+Sun Mon Tue Wed Thu Fri Sat  
+         |1|   2    3    4  
+  5    6    7  [8]  |9|  10  
+```
+- `|9|` = Day with 1+ events  
+- `[8]` = Current day (with or without events)  
+
 
 ## **3. User Interaction**  
 ```mermaid
@@ -232,13 +282,73 @@ graph LR
     D --> E[Save to Vector & File]
 ```
 
-## **4. Error Handling**  
+## 4 🛡️ Error Handling System
+
+### Smart Input Processing
+The calendar intelligently handles user input with these protective measures:
+
+### 4.1 **First-Character Command Parsing**
 ```cpp
-while (day > nDay[month-1]) { 
-    cerr << "Invalid day!"; 
-    cin >> day; 
+string input;
+getline(cin, input);          // Captures full input line
+choice = toupper(input[0]);   // Only considers first character
+```
+**Behavior Examples:**
+| Input | Effective Command | Buffer Handling |
+|-------|-------------------|-----------------|
+| `"n"` | Next Month (`N`) | Cleans residual buffer |
+| `"next"` | Next Month (`N`) | Auto-discards "ext" |
+| `"nn"` | Next Month (`N`) | Ignores second 'n' |
+| `" x"` | Invalid (space) | Full discard |
+
+### 4.2 **Type Validation Upgrade**
+```cpp
+int typeValidation() {
+    string input;
+    getline(cin, input);
+    
+    // First-character priority with fallback
+    if (isdigit(input[0])) {
+        try {
+            return stoi(input);
+        } catch (...) { /* handle overflow */ }
+    }
+    return 0; // Unified failure case
 }
 ```
+
+### 4.3 **Input Processing Flow**
+```mermaid
+graph LR
+    A[Raw Input] --> B(Extract First Char)
+    B --> C{Valid Command?}
+    C -->|Yes| D[Execute]
+    C -->|No| E[Show Error Menu]
+    D & E --> F[Auto-Clear Buffer]
+```
+
+### Key Design Choices:
+1. **Lenient Parsing**:
+   - `"pReV"` → Processes as `P` (Previous)
+   - `"aDD"` → Processes as `A` (Add Event)
+
+2. **Silent Buffer Cleaning**:
+   ```cpp
+   // After every command:
+   cin.ignore(numeric_limits<streamsize>::max(), '\n');
+   ```
+
+3. **Visual Feedback**:
+   ```bash
+   Enter Command: nextmonth
+   [System]: Executing 'N' (Next Month)
+   ```
+
+### Special Cases Handled:
+- **Leading Whitespace**: `"   c"` → Current Month (`C`)
+- **Symbolic Input**: `">>"` → Next Day (`>`) 
+- **Empty Enter**: No-op (preserves current view)
+
 
 ## **5. Visual Demonstration**  
 ![Calendar Screenshot]
@@ -264,4 +374,3 @@ This application demonstrates:
 - Cloud synchronization  
 
 [📜 MIT License](LICENSE.txt)
-
