@@ -249,8 +249,8 @@ int main()
     Calendar cal(currentYear, currentMonth, currentDay);
     cal.printcuCal();
     
-	char choice;
-    string event, fName;
+	
+    string fName; char choice;
     
     int mon = currentMonth, yr = currentYear, day = currentDay;
     int id = 0;
@@ -262,12 +262,10 @@ int main()
 			day = currentDay;
 			yr = currentYear;
         }
-
         cout << "[ENTER] Program Command: ";
-        cin >> choice;
-        cin.ignore();
-        choice = toupper(choice);
-
+        string input;
+        getline(cin, input);
+        choice = input.empty() ? '\0' : toupper(input[0]);
         switch (choice) 
         {
             case 'N': // Next month
@@ -382,6 +380,7 @@ int main()
             case 'A': // Add event
             {
                 int tday = 0;
+                string event;
                 if (choiceA(yr, mon, tday))
                 {
                     cout << "[ENTER] Event: ";
@@ -415,7 +414,7 @@ int main()
                     {
                         if (id > cal.printID())
                         {
-                            cout << "\nInvalid input. Value out of range. Next time enter an id (<" << cal.printID() << ")\n\n";
+                            cout << "\nInvalid input. Value out of range. Next time enter an id (<=" << cal.printID() << ")\n\n";
                             continue;
                         }
                         else
@@ -467,14 +466,20 @@ int main()
             {
                 if (fName == "")
                 {
-                    cout << "No file name provided. Do you want to enter the filename: ";
-                    cin >> choice;
-                    if (toupper(choice) == 'Y')
+                    cout << "No file name provided. Do you want to enter the filename(Y/N): ";
+                    getline(cin, input);
+                    choice = input.empty() ? '\0' : toupper(input[0]);
+                    if (choice == 'Y')
                     {
                         cout << "[ENTER] a filename to read all the events from it: ";
                         cin >> fName;
                     }
-                    else
+					else if (choice == 'N')
+					{
+						cout << "Exiting Program...\n\n";
+						break;
+					}
+					else
                     {
                         cout << "No file name provided. Exiting...\n\n";
                         break;
@@ -483,13 +488,24 @@ int main()
                 else
                 {
                     cout << "\nDo you want to enter the filename or read the events stored in " << fName << " file? (Y/N)\n"
-                        << "[ENTER] Y - to enter a new filename: ";
-                    cin >> choice;
-                    if (toupper(choice) == 'Y')
+                        << "[ENTER] Y - to enter a new filename / N - to read events stored in " << fName << ": ";
+                    getline(cin, input);
+                    choice = input.empty() ? '\0' : toupper(input[0]);
+                    if (choice == 'Y')
                     {
                         cout << "[ENTER] a filename to read all the events from it: ";
                         cin >> fName;
                     }
+					else if (choice == 'N')
+					{
+						cout << "Exiting Program...\n\n";
+						break;
+					}
+					else
+					{
+						cout << "No file name provided. Exiting...\n\n";
+						break;
+					}
                 }
 				bool exists = fileExists(fName);
 				if (exists)
