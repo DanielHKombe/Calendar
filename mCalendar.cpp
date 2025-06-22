@@ -379,16 +379,14 @@ int main()
 
             case 'A': // Add event
             {
-                int tday = 0;
                 string event;
-                if (choiceA(yr, mon, tday))
+                if (choiceA(yr, mon, day))
                 {
                     cout << "[ENTER] Event: ";
                     cin.ignore();
                     getline(cin, event);
-                    cal.enterEvent(tday, mon, yr, event);
-                    cal.printspecCal(mon, yr, tday, id);
-                    day = tday;
+                    cal.enterEvent(day, mon, yr, event);
+                    cal.printspecCal(mon, yr, day, id);
                 }
                 break;
             }
@@ -498,7 +496,7 @@ int main()
                     }
 					else if (choice == 'N')
 					{
-						cout << "Exiting Program...\n\n";
+                        cal.fileReading(fName); 
 						break;
 					}
 					else
@@ -513,6 +511,7 @@ int main()
                     cout << "Outputing events stored in " << fName << " file...\n\n";
                     Sleep(cal.printID() * 500);
 					cal.fileReading(fName);
+                    cin.ignore();
 				}
 				else
 				{
