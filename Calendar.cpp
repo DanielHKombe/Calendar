@@ -1,5 +1,7 @@
 #include "Calendar.h"
 
+int Date::nDay[12] = { 0 };
+
 Date::Date(int yr , int mon, int d ) :
     year(yr),
     month(mon),
@@ -28,7 +30,7 @@ bool Date::isLeap(int year)
     return false;
 }
 
-Calendar::Calendar(int yr, int mon, int d) : Date(yr, mon, d), firstDay(0), id(0), /*exist(false),*/ fileName("")
+Calendar::Calendar(int yr, int mon, int d) : Date(yr, mon, d), firstDay(0), id(0), rId(0), /*exist(false),*/ fileName("")
 { 
     cFile.open("2.718281828459045235.txt", ios::in);
     if (!cFile.is_open())
@@ -108,6 +110,15 @@ void Calendar::enterEvent(int day, int mon, int yr, string ev)
     id++;
 }
 
+//void Calendar::recurringEvents(int day, int mon, string ev)
+//{
+//    int d = day,
+//        m = mon;
+//    string event = ev;
+//    events.push_back(Event(d, m, event));
+//    rId++;
+//}
+
 void Calendar::deleteEvent(int index)
 {
     if (index >= 0 && index < events.size())
@@ -123,7 +134,7 @@ void Calendar::deleteEvent(int index)
 
 void Calendar::eReminder()
 {
-    int leastDays = 30000;
+    int daysRemaining = 30000;
     bool found = false;
     if (id > 0)
     {
@@ -140,16 +151,16 @@ void Calendar::eReminder()
                 }
                 else if (dRem > day)
                 {
-                    if (leastDays > (dRem - day))
+                    if (daysRemaining > (dRem - day))
                     {
-                        leastDays = dRem - day;
+                        daysRemaining = dRem - day;
                     }
                     found = true;
                 }
             }
         }
         if (found)
-            cout << leastDays << " days remaining to next event!\n";
+            cout << daysRemaining << " days remaining to next event!\n";
         else
             cout << endl;
     }
@@ -158,7 +169,7 @@ void Calendar::eReminder()
 
 void Calendar::especReminder(int mon, int yr, int d)
 {
-    int leastDays = 30000;
+    int daysRemaining = 30000;
     bool found = false;
     if (id > 0)
     {
@@ -175,16 +186,16 @@ void Calendar::especReminder(int mon, int yr, int d)
                 }
                 else if (dRem > d)
                 {
-                    if (leastDays > (dRem - d))
+                    if (daysRemaining > (dRem - d))
                     {
-                        leastDays = dRem - d;
+                        daysRemaining = dRem - d;
                     }
                     found = true;
                 }
             }
         }
         if (found)
-            cout << leastDays << " days remaining to next event!\n";
+            cout << daysRemaining << " days remaining to next event!\n";
         else
             cout << endl;
     }
@@ -291,7 +302,7 @@ void Calendar::printCal(int mon, int yr, int d, int ID)
     else
         cout << setw(4.5 * fDay);
 
-    int dCount = fDay + 1;
+    int dCount = fDay + 1 ;
     int tday = nDay[mon - 1];
     vector<int>eday;
     if (id > 0)
